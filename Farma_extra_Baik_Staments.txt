@@ -1,0 +1,43 @@
+create table Empleados (
+empID int not null primary key,
+cedula varchar(13),
+nombre varchar(25),
+apellido varchar(25),
+direccion varchar(95),
+email varchar(69),
+horario_entrada time,
+horario_salida time,
+seguro varchar(20),
+cargofk int foreign key references Cargos(cargoID) 
+)
+
+create table Empleados_tel(telempID int not null primary key,
+telefono varchar(15),
+empFK int foreign key references Empleados(empID))
+
+create table Dependientes(dependienteID int not null primary key,seguro varchar(20),nombre varchar(25),apellido varchar(25),cedula varchar(13),direccion varchar(95),empFK int foreign key references Empleados(empID))
+
+create table Estafetas(IDestafeta int Not null primary key,RNC varchar(12),nombre_compañia varchar(30))
+
+create table Pagos_estafetas(ID int not null primary key,monto_recibido int,fecha date,empFK int foreign key references Empleados(empID), IDestafetaFK int foreign key references Estafetas(IDestafeta))
+
+create table Cargos(cargoID int not null primary key,nombre varchar(13),sueldo int)
+
+create table Clientes(clienteID int not null primary key, nombre varchar(25),apellido varchar(25),seguro varchar(20),cedula varchar(13))
+
+create table Clientes_tel(telclienteID int not null primary key,telefono varchar(15) ,clienteFK int foreign key references Clientes(clienteID))
+
+create table Compras(compraID int not null primary key,forma_de_pago varchar(10),fecha date,cantidad int,empFK int foreign key references Empleados(empID),clienteFK int foreign key references Clientes(clienteID), medicamentoFK int)
+
+create table Medicamentos(medicamentoID int not null primary key ,precio int ,nombre varchar(25))
+
+create table Marcas(marcaID int not null primary key ,nombre varchar(25),medicamentoFK int foreign key references Medicamentos(medicamentoID))
+
+create table Almacenes(almacenID int not null primary key, fecha_vencimiento date,cantidad int ,posicion varchar(10),medicamentoFK int foreign key references Medicamentos(medicamentoID))
+
+create table Abastecimientos(abastecimientoID int not null primary key,cantidad int,fecha_entrada date,medicamentoFK int foreign key references Medicamentos(medicamentoID),proveedorFK int)
+
+create table Proveedores(provedorID int not null primary key,nombre varchar(25),RNC varchar(12))
+
+Alter table Compras add foreign key (medicamentoFK) references Medicamentos(medicamentoID)
+
